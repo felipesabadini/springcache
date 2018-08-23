@@ -33,4 +33,12 @@ public class PersonController {
         ThreadLocalTenant.TENANT_CURRENT.set(tenant);
         return ResponseEntity.ok(service.getAll());
     }
+
+    @GetMapping("/v2")
+    public ResponseEntity<?> getAll2(@RequestParam(name = "tenant", defaultValue = "NO_TENANT") String tenant,
+                                     @RequestParam(name = "user", defaultValue = "NO_USER") String user) {
+        ThreadLocalTenant.TENANT_CURRENT.set(tenant);
+        ThreadLocalTenant.USER_CURRENT.set(user);
+        return ResponseEntity.ok(service.getAll2());
+    }
 }

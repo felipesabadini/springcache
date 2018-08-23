@@ -1,5 +1,6 @@
 package com.sabadini.springcache.service;
 
+import com.sabadini.springcache.annotations.CacheableTenantAndUser;
 import com.sabadini.springcache.configuration.CacheConfiguration;
 import com.sabadini.springcache.configuration.ThreadLocalTenant;
 import com.sabadini.springcache.domain.Person;
@@ -35,6 +36,14 @@ public class PersonService {
     public List<Person> getAll() {
         final String tenant = ThreadLocalTenant.TENANT_CURRENT.get();
         log.info(String.format("Seeking people with the tenant -> %s", tenant));
+        return this.repository.findPersonByTenantEquals(tenant);
+    }
+
+    @CacheableTenantAndUser(cacheNames = CacheConfiguration.CACHE_PERSON)
+    public List<Person> getAll2() {
+        final String tenant = ThreadLocalTenant.TENANT_CURRENT.get();
+        final String user = ThreadLocalTenant.USER_CURRENT.get();
+        log.info(String.format("Seeking people with the tenant -> %s  and user -> %s", tenant, user));
         return this.repository.findPersonByTenantEquals(tenant);
     }
 }
